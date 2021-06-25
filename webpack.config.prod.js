@@ -2,7 +2,7 @@
  * @Author: 李聪
  * @Date: 2021-06-24 16:45:12
  * @LastEditors: 李聪
- * @LastEditTime: 2021-06-25 17:06:39
+ * @LastEditTime: 2021-06-25 17:51:57
  * @Description: webpack生产环境配置
  */
 // 显示webpack构建时间插件,启用此插件会导致报错You forgot to add 'mini-css-extract-plugin' plugin
@@ -17,6 +17,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin'); // html插件引入
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 抽离Css
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; // 查看打包体积
+const TerserPlugin = require("terser-webpack-plugin"); // 压缩 JavaScript
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -26,6 +27,15 @@ const webpackConfig = merge(baseWebpackConfig, {
 
   output: {
     publicPath: './', //通常是CDN地址，本地编译的话先改成./
+  },
+
+  performance: {
+    hints: 'warning', // 枚举 false关闭
+    maxEntrypointSize: 50000000, //入口文件的最大体积，单位字节
+    maxAssetSize: 30000000, //生成文件的最大体积，单位字节
+    assetFilter: function (assetFilename) { //只给出js文件的性能提示
+      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+    }
   },
 
   module: {
@@ -79,10 +89,23 @@ const webpackConfig = merge(baseWebpackConfig, {
 
   // 优化
   optimization: {
+    // 压缩代码
+    // minimize: true, // 可省略，默认最优配置：生产环境，压缩 true。开发环境，不压缩 false
+    minimizer: [
+      new TerserPlugin({
+        // parallel: true, // 可省略，默认开启并行
+        terserOptions: {
+          toplevel: true, // 最高级别，删除无用代码
+          ie8: true,
+          safari10: true,
+        }
+      })
+    ],
+
     // 抽离公共代码是对于多页应用来说的
     // 即使是单页应用，同样可以使用这个配置，例如，打包出来的 bundle.js 体积过大，我们可以将一些依赖打包成动态链接库，然后将剩下的第三方依赖拆出来。这样可以有效减小 bundle.js 的体积大小
     splitChunks: { //分割代码块
-      maxInitialRequests:6, //默认是5
+      maxInitialRequests: 6, //默认是5
       cacheGroups: {
         concatenateModules: false,
         vendor: {

@@ -1,1 +1,0 @@
-(self.webpackChunkwebpack1=self.webpackChunkwebpack1||[]).push([[535],{8473:function(e,n,s){"use strict";var t=s(530),u=s(6849);new(function(){function e(n){(0,t.Z)(this,e),this.user=n}return(0,u.Z)(e,[{key:"getUser",value:function(){console.log(this.user)}}]),e}())("lisi1")}},function(e){"use strict";e.O(0,[736],(function(){return 8473,e(e.s=8473)})),e.O()}]);
