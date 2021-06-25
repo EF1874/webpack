@@ -2,7 +2,7 @@
  * @Author: 李聪
  * @Date: 2021-06-23 14:28:46
  * @LastEditors: 李聪
- * @LastEditTime: 2021-06-25 17:01:10
+ * @LastEditTime: 2021-06-25 17:40:57
  * @Description: webpac未区分环境配置
  */
 const HtmlWebpackPlugin = require('html-webpack-plugin'); // html插件引入
@@ -22,7 +22,15 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
   mode: isDev ? 'development' : 'production',
   devtool: 'inline-source-map', // inline-|hidden-|eval- 将浏览器打印内容映射到代码对应行
-
+  performance: {
+    hints: 'warning', // 枚举 false关闭
+    maxEntrypointSize: 50000000, //入口文件的最大体积，单位字节
+    maxAssetSize: 30000000, //生成文件的最大体积，单位字节
+    assetFilter: function(assetFilename) { //只给出js文件的性能提示
+      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+    }
+  },
+  
   // entry: './src/index.js', //webpack的默认配置
   // 为数组时，表示有“多个主入口”，想要多个依赖文件一起注入时，会这样配置
   entry: {
