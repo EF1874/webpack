@@ -1,0 +1,1 @@
+class Anutils{constructor(s){this.utils=s}get(){console.log(this.utils)}}class UseUtils extends Anutils{constructor(s){super(),this.use=s}getUse(){console.log("use",this.use,"base",this.base)}}const use=new UseUtils("use1");

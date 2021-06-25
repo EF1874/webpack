@@ -1,0 +1,1 @@
+class Anbase{constructor(s){this.base=s}get(){console.log(this.base)}}const base=new Anbase("base1");base.get();class UseBase extends Anbase{constructor(s){super(),this.use=s}getUse(){console.log("use",this.use,"base",this.base)}}const use=new UseBase("use1");
